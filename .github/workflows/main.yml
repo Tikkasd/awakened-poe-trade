@@ -51,8 +51,26 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Hash
         run: type .\main\dist\latest.yml
-      - name: Upload Windows Artifact
+      - name: Separate Setup and other EXEs
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path setup_exe
+          New-Item -ItemType Directory -Force -Path other_exes
+
+          Get-ChildItem -Path .\main\dist\*.exe | ForEach-Object {
+            if ($_.Name -like "*Setup*") {
+              Copy-Item $_.FullName -Destination setup_exe
+            } else {
+              Copy-Item $_.FullName -Destination other_exes
+            }
+          }
+      - name: Upload Setup EXE Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows-build
-          path: ./main/dist/*.exe
+          name: windows-setup
+          path: setup_exe
+      - name: Upload Other EXEs Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-exe
+          path: other_exes
