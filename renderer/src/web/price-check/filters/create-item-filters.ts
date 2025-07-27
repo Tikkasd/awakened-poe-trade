@@ -247,7 +247,7 @@ export function createFilters (
     filters.mirrored = { disabled: false }
   }
 
-  if (!item.isFractured && opts.exact) {
+  if (!item.isFractured) {
     filters.fractured = { value: false }
   }
 
