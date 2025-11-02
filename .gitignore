@@ -26,3 +26,9 @@ yarn-error.log*
 # vitepress
 docs/.vitepress/dist
 docs/.vitepress/cache
+.vs/ProjectSettings.json
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+.vs/awakened-poe-trade/FileContentIndex/b693d3d9-2aa9-427b-bfdb-530dba30bde9.vsidx
+.vs/awakened-poe-trade/v17/.wsuo
+.vs/awakened-poe-trade/v17/DocumentLayout.json
