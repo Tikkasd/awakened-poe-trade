@@ -106,7 +106,6 @@ export default defineComponent({
 
     watch(() => props.item, (item, prevItem) => {
       const prevCurrency = (presets.value != null) ? itemFilters.value.trade.currency : undefined
-      const prevMerchantOnly = (presets.value != null) ? itemFilters.value.trade.merchantOnly : undefined
 
       presets.value = createPresets(item, {
         league: leagues.selectedId.value!,
@@ -117,11 +116,7 @@ export default defineComponent({
         currency: widget.value.rememberCurrency || (prevItem &&
           item.info.namespace === prevItem.info.namespace &&
           item.info.refName === prevItem.info.refName
-        ) ? prevCurrency : undefined,
-        merchantOnly: widget.value.rememberMerchantOnly || (prevItem &&
-          item.info.namespace === prevItem.info.namespace &&
-          item.info.refName === prevItem.info.refName
-        ) ? prevMerchantOnly : undefined
+        ) ? prevCurrency : undefined
       })
 
       if ((!props.advancedCheck && !widget.value.smartInitialSearch) ||

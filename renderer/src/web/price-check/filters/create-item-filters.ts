@@ -10,7 +10,6 @@ export const SPECIAL_SUPPORT_GEM = ['Empower Support', 'Enlighten Support', 'Enh
 interface CreateOptions {
   league: string
   currency: string | undefined
-  merchantOnly: boolean | undefined
   collapseListings: 'app' | 'api'
   activateStockFilter: boolean
   exact: boolean
@@ -26,7 +25,7 @@ export function createFilters (
     trade: {
       offline: false,
       onlineInLeague: false,
-      merchantOnly: opts.merchantOnly ?? true,
+      merchantOnly: false,
       listed: undefined,
       currency: opts.currency,
       league: opts.league,
