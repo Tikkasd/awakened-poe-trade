@@ -33,8 +33,19 @@ export interface ParsedItem {
   weaponPHYSICAL?: number
   weaponELEMENTAL?: number
   mapBlighted?: 'Blighted' | 'Blight-ravaged'
-  mapTier?: number
+  mapCompletionReward?: string
+  map?: {
+    tier: number | undefined
+    itemQuantity?: number
+    itemRarity?: number
+    packSize?: number
+    moreMaps?: number
+    moreScarabs?: number
+    moreCurrency?: number
+    moreDivCards?: number
+  }
   gemLevel?: number
+  imbuedGem?: boolean
   areaLevel?: number
   talismanTier?: number
   memoryStrands?: number
@@ -48,6 +59,7 @@ export interface ParsedItem {
   isCorrupted: boolean
   isUnmodifiable?: boolean
   isMirrored?: boolean
+  isSplit?: boolean
   influences: ItemInfluence[]
   logbookAreaMods?: ParsedModifier[][]
   sentinelCharge?: number
