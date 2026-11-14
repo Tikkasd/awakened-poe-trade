@@ -366,10 +366,7 @@
     "select_stock": "Always select \"Stock\" filter",
     "show_prediction": "Show price prediction",
     "remember_currency": "Remember the Buyout Currency filter",
-<<<<<<< HEAD
-    "remember_merchant": "Remember the Merchant Only filter"
-=======
+    "remember_merchant": "Remember the Merchant Only filter",
     "default_settings": "Search by default with the following settings:"
->>>>>>> pricecheck-fallback
   }
 }

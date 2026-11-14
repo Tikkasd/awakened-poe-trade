@@ -142,11 +142,8 @@ export default defineComponent({
       hotkeyLocked: computed(() => configWidget.value.hotkeyLocked),
       smartInitialSearch: configModelValue(() => configWidget.value, 'smartInitialSearch'),
       lockedInitialSearch: configModelValue(() => configWidget.value, 'lockedInitialSearch'),
-<<<<<<< HEAD
       rememberCurrency: configModelValue(() => configWidget.value, 'rememberCurrency'),
       rememberMerchantOnly: configModelValue(() => configWidget.value, 'rememberMerchantOnly'),
-=======
->>>>>>> pricecheck-fallback
       searchStatRange: computed<number>({
         get () {
           return configWidget.value.searchStatRange

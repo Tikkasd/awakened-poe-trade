@@ -27,7 +27,6 @@ yarn-error.log*
 
 # vitepress
 docs/.vitepress/dist
-<<<<<<< HEAD
 docs/.vitepress/cache
 .vs/ProjectSettings.json
 .vs/slnx.sqlite
@@ -35,6 +34,3 @@ docs/.vitepress/cache
 .vs/awakened-poe-trade/FileContentIndex/b693d3d9-2aa9-427b-bfdb-530dba30bde9.vsidx
 .vs/awakened-poe-trade/v17/.wsuo
 .vs/awakened-poe-trade/v17/DocumentLayout.json
-=======
-docs/.vitepress/cache
->>>>>>> pricecheck-fallback

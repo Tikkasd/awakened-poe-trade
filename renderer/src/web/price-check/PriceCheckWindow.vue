@@ -122,13 +122,10 @@ export default defineComponent({
         searchStatRange: 10,
         showCursor: true,
         requestPricePrediction: false,
-<<<<<<< HEAD
         rememberCurrency: false,
-        rememberMerchantOnly: true
-=======
+        rememberMerchantOnly: true,
         merchantOnly: true,
         defaultCurrency: null
->>>>>>> pricecheck-fallback
       }
     }
   } satisfies WidgetSpec,

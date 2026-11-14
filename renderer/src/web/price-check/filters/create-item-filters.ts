@@ -12,13 +12,8 @@ export const SPECIAL_SUPPORT_GEM = ['Empower Support', 'Enlighten Support', 'Enh
 
 export interface CreateOptions {
   league: string
-<<<<<<< HEAD
-  currency: string | undefined
-  merchantOnly: boolean | undefined
-=======
   merchantOnly: boolean
   currency: string | null
->>>>>>> pricecheck-fallback
   collapseListings: 'app' | 'api'
   activateStockFilter: boolean
   exact: boolean
@@ -274,12 +269,6 @@ export function createFilters (
     }
   }
 
-<<<<<<< HEAD
-  if (item.quality && item.quality >= 20) {
-    filters.quality = {
-      value: item.quality,
-      disabled: (item.quality <= 20)
-=======
   if (item.quality && item.quality >= 20 && !JEWELLERY.has(item.category!)) {
     if (
       item.category === ItemCategory.Flask || item.category === ItemCategory.Tincture ||
@@ -289,7 +278,6 @@ export function createFilters (
         value: item.quality,
         disabled: (item.quality <= 20)
       }
->>>>>>> pricecheck-fallback
     }
   }
 

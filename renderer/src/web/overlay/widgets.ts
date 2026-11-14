@@ -52,11 +52,8 @@ export interface PriceCheckWidget extends Widget {
   showCursor: boolean
   requestPricePrediction: boolean
   builtinBrowser: boolean
-<<<<<<< HEAD
   rememberCurrency: boolean
   rememberMerchantOnly: boolean
-=======
->>>>>>> pricecheck-fallback
 }
 
 export interface StopwatchWidget extends Widget {

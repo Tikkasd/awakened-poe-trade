@@ -13,19 +13,7 @@ type CreatePresetsOptions =
 
 export function createPresets (
   item: ParsedItem,
-<<<<<<< HEAD
-  opts: {
-    league: string
-    currency: string | undefined
-    merchantOnly: boolean | undefined
-    collapseListings: 'app' | 'api'
-    activateStockFilter: boolean
-    searchStatRange: number
-    useEn: boolean
-  }
-=======
   opts: CreatePresetsOptions
->>>>>>> pricecheck-fallback
 ): { presets: FilterPreset[], active: string } {
   if (item.isUnknownItem) {
     const stats = createExactStatFilters(item, item.statsByType, opts)

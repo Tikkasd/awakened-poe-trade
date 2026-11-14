@@ -114,16 +114,16 @@ export default defineComponent({
     const filtersComponent = ref<ComponentPublicInstance>(null!)
 
     watch(() => props.item, (item, prevItem) => {
-<<<<<<< HEAD
-      const prevCurrency = (presets.value != null) ? itemFilters.value.trade.currency : undefined
-      const prevMerchantOnly = (presets.value != null) ? itemFilters.value.trade.merchantOnly : undefined
-=======
       const prevCurrency = (presets.value != null) ? itemFilters.value.trade.currency : null
->>>>>>> pricecheck-fallback
+      const prevMerchantOnly = (presets.value != null) ? itemFilters.value.trade.merchantOnly : null
 
       presets.value = createPresets(item, {
         league: leagues.selectedId.value!,
-        merchantOnly: widget.value.merchantOnly,
+        merchantOnly: ((widget.value.rememberMerchantOnly || (prevItem &&
+          item.info.namespace === prevItem.info.namespace &&
+          item.info.refName === prevItem.info.refName))
+          ? prevMerchantOnly
+          : null) ?? widget.value.merchantOnly,
         collapseListings: widget.value.collapseListings,
         activateStockFilter: widget.value.activateStockFilter,
         searchStatRange: widget.value.searchStatRange,
@@ -131,15 +131,7 @@ export default defineComponent({
         currency: (prevItem &&
           item.info.namespace === prevItem.info.namespace &&
           item.info.refName === prevItem.info.refName
-<<<<<<< HEAD
-        ) ? prevCurrency : undefined,
-        merchantOnly: widget.value.rememberMerchantOnly || (prevItem &&
-          item.info.namespace === prevItem.info.namespace &&
-          item.info.refName === prevItem.info.refName
-        ) ? prevMerchantOnly : undefined
-=======
         ) ? prevCurrency : widget.value.defaultCurrency
->>>>>>> pricecheck-fallback
       })
 
       if ((!props.advancedCheck && !widget.value.smartInitialSearch) ||
