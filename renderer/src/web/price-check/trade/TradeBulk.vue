@@ -84,9 +84,10 @@
       </table>
     </div>
   </div>
-  <ui-error-box class="mb-4" v-else>
+  <ui-error-box class="mb-2" v-else>
     <template #name>{{ t(':error') }}</template>
-    <p>Error: {{ error }}</p>
+    <p v-if="error.includes('JSON')">{{ t('app.leagues_failed_help') }}</p>
+    <p v-else>Error: {{ error }}</p>
     <template #actions>
       <button class="btn" @click="execSearch">{{ t('Retry') }}</button>
       <button class="btn" @click="openTradeLink">{{ t('Browser') }}</button>
@@ -174,8 +175,8 @@ function useBulkApi () {
             )
             items.value = _result.value.listed
             const otherHave = (have === 'divine')
-              ? result.value?.xchgChaos?.listed.value!
-              : result.value?.xchgStable?.listed.value!
+              ? result.value!.xchgChaos.listed.value!
+              : result.value!.xchgStable.listed.value!
             // fix best guess we did while making optimistic search
             otherHave.total -= _result.value.total
           } catch (err) {
@@ -263,6 +264,7 @@ function useMarketRatioFinder () {
 
 export default defineComponent({
   components: { OnlineFilter, TradeLinks, UiErrorBox },
+  emits: ['reset'],
   props: {
     filters: {
       type: Object as PropType<ItemFilters>,
@@ -273,7 +275,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup (props) {
+  setup (props, ctx) {
     const widget = computed(() => AppConfig<PriceCheckWidget>('price-check')!)
     const { error, result, search } = useBulkApi()
     const { marketRatio, find: findMarketRatio } = useMarketRatioFinder()
@@ -334,6 +336,7 @@ export default defineComponent({
       makeTradeLink,
       openTradeLink () {
         showBrowser(makeTradeLink(['mirror']))
+        ctx.emit('reset')
       }
     }
   }

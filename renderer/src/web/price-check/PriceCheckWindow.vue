@@ -3,7 +3,7 @@
     style="top: 0; left: 0; height: 100%; width: 100%; position: absolute;"
     class="flex grow h-full pointer-events-none" :class="{
     'flex-row': clickPosition === 'stash',
-    'flex-row-reverse': clickPosition === 'inventory',
+    'flex-row-reverse': clickPosition === 'inventory'
   }">
     <div v-if="!isBrowserShown" class="layout-column shrink-0"
       style="width: var(--game-panel);">
@@ -39,6 +39,13 @@
           <pre class="bg-gray-900 rounded m-4 overflow-x-hidden p-2">{{ item.error.rawText }}</pre>
         </template>
         <template v-else-if="item?.isOk()">
+          <template v-if="item.value.isUnknownItem">
+            <div class="m-4 py-1 px-2 bg-gray-900 rounded">
+              <div>{{ t('item.unknown') }}</div>
+              <div class="text-gray-400">{{ t('item.unknown_help') }}</div>
+            </div>
+            <pre class="bg-gray-900 rounded mx-4 mb-4 overflow-x-hidden p-2">{{ item.value.rawText }}</pre>
+          </template>
           <unidentified-resolver :item="item.value" @identify="handleIdentification($event)" />
           <checked-item v-if="isLeagueSelected"
             :item="item.value" :advanced-check="advancedCheck" />
@@ -115,8 +122,13 @@ export default defineComponent({
         searchStatRange: 10,
         showCursor: true,
         requestPricePrediction: false,
+<<<<<<< HEAD
         rememberCurrency: false,
         rememberMerchantOnly: true
+=======
+        merchantOnly: true,
+        defaultCurrency: null
+>>>>>>> pricecheck-fallback
       }
     }
   } satisfies WidgetSpec,
@@ -181,9 +193,8 @@ export default defineComponent({
       checkPosition.value = e.position
       advancedCheck.value = e.focusOverlay
 
-      item.value = (e.item ? ok(e.item as ParsedItem) : parseClipboard(e.clipboard))
+      item.value = (e.item ? ok(e.item as ParsedItem) : parseClipboard(e.clipboard, { allowUnknownItem: true }))
         .andThen(item => (
-          (item.category === ItemCategory.HeistContract && item.rarity !== ItemRarity.Unique) ||
           (item.category === ItemCategory.Sentinel && item.rarity !== ItemRarity.Unique))
           ? err('item.unknown')
           : ok(item))
@@ -237,6 +248,12 @@ export default defineComponent({
       } else {
         wm.setFlag(props.config.wmId, 'invisible-on-blur', false)
         wm.setFlag(props.config.wmId, 'hide-on-blur', true)
+      }
+    })
+
+    watch(leagues.error, (value) => {
+      if (value === null) {
+        closeBrowser()
       }
     })
 

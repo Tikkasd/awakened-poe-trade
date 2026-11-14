@@ -92,7 +92,7 @@ export function poeWebApi () {
     case 'en': return 'www.pathofexile.com'
     case 'ru': return 'ru.pathofexile.com'
     case 'cmn-Hant': return 'pathofexile.tw'
-    case 'ko': return 'poe.game.daum.net'
+    case 'ko': return 'poe.kakaogames.com'
   }
 }
 
@@ -180,6 +180,7 @@ export const defaultConfig = (): Config => ({
 })
 
 function upgradeConfig (_config: Config): Config {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const config = _config as Omit<Config, 'widgets'> & { widgets: Array<Record<string, any>> }
 
   if (config.configVersion < 3) {
@@ -392,8 +393,11 @@ function upgradeConfig (_config: Config): Config {
   }
 
   const priceCheck = config.widgets.find(w => w.wmType === 'price-check') as widget.PriceCheckWidget
-  if (priceCheck.rememberCurrency === undefined) {
-    priceCheck.rememberCurrency = false
+  if (priceCheck.merchantOnly === undefined) {
+    priceCheck.merchantOnly = true
+  }
+  if (priceCheck.defaultCurrency === undefined) {
+    priceCheck.defaultCurrency = null
   }
 
   for (const widget of config.widgets) {
@@ -431,6 +435,7 @@ function upgradeConfig (_config: Config): Config {
 
     config.configVersion = 18
   }
+  /* eslint-enable */
 
   return config as unknown as Config
 }

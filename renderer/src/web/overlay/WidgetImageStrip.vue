@@ -1,13 +1,11 @@
 <template>
   <Widget :config="config" v-slot="{ isEditing, isMoving }" move-handles="top-bottom">
     <div class="widget-default-style p-1" style="min-width: 5rem;">
-      <template v-if="true">
-        <div v-if="!isEditing" class="text-gray-100 m-1 leading-4 text-center">{{ config.wmTitle || 'Untitled' }}</div>
-        <input v-else
-          class="leading-4 rounded text-gray-100 p-1 bg-gray-700 w-full mb-1"
-          :placeholder="t('widget.title')"
-          v-model="config.wmTitle">
-      </template>
+      <div v-if="!isEditing" class="text-gray-100 m-1 leading-4 text-center">{{ config.wmTitle || 'Untitled' }}</div>
+      <input v-else
+        class="leading-4 rounded text-gray-100 p-1 bg-gray-700 w-full mb-1"
+        :placeholder="t('widget.title')"
+        v-model="config.wmTitle">
       <DndContainer tag="div" class="flex gap-x-1"
         v-model="config.images" item-key="id"
         handle="[data-qa=drag-handle]" :animation="200" :force-fallback="true">
@@ -16,7 +14,7 @@
             <FullscreenImage
               :src="img.url"
               :disabled="isEditing || isMoving"
-              class="rounded overflow-hidden" />
+              class="rounded overflow-hidden w-full h-full" />
             <button v-if="isEditing" @click="remove(img.id)"
               class="bg-gray-800 absolute top-0 right-0 rounded-bl text-red-500 leading-none px-2 py-1 flex"><i class="fas fa-times"></i></button>
             <button v-if="isEditing" data-qa="drag-handle"

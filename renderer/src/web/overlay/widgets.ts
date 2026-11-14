@@ -47,11 +47,16 @@ export interface PriceCheckWidget extends Widget {
   smartInitialSearch: boolean
   lockedInitialSearch: boolean
   activateStockFilter: boolean
+  merchantOnly: boolean
+  defaultCurrency: string | null
   showCursor: boolean
   requestPricePrediction: boolean
   builtinBrowser: boolean
+<<<<<<< HEAD
   rememberCurrency: boolean
   rememberMerchantOnly: boolean
+=======
+>>>>>>> pricecheck-fallback
 }
 
 export interface StopwatchWidget extends Widget {

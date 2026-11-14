@@ -14,7 +14,7 @@ export interface ParsedStat {
   readonly translation: StatMatcher
   roll?: {
     unscalable: boolean
-    legacy?: true
+    generation?: 'legacy' | 'volatile' | 'reflecting'
     dp: boolean
     value: number
     min: number
@@ -210,7 +210,7 @@ export function tryParseTranslation (
       roll: combination.values.length
         ? {
             unscalable: stat.unscalable,
-            legacy: legacyStatRolls || undefined,
+            generation: (legacyStatRolls) ? 'legacy' : undefined,
             dp: found.stat.dp || combination.values.some(stat => stat.decimal),
             value: getRollOrMinmaxAvg(combination.values.map(stat => stat.roll)),
             min: getRollOrMinmaxAvg(combination.values.map(stat => stat.bounds?.min ?? stat.roll)),
@@ -280,7 +280,7 @@ export function _resolveTranslation (
   if (resolve.strat === 'trivial-merge') {
     const withMatchStr = (matchStr.length)
       ? onTradeStats.filter(stat =>
-        stat.matchers.some(m => m.string === matchStr || m.advanced === matchStr))
+          stat.matchers.some(m => m.string === matchStr || m.advanced === matchStr))
       : onTradeStats
     if (!withMatchStr.length) return undefined
     const merged = withMatchStr[0]
