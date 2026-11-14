@@ -41,6 +41,22 @@ export function createFilters (
     }
   }
 
+  if (item.isUnknownItem) {
+    if (item.rarity === ItemRarity.Unique && !item.isUnidentified) {
+      filters.searchExact = {
+        name: item.info.name,
+        nameTrade: t(opts, item.info),
+        baseTypeTrade: (item.uniqueBase) ? t(opts, item.uniqueBase) : undefined
+      }
+    } else {
+      filters.searchExact = {
+        baseType: item.info.name,
+        baseTypeTrade: t(opts, item.info)
+      }
+    }
+    return filters
+  }
+
   if (
     (!item.info.craftable || CONSUMABLE_CRAFTABLE_ITEM.has(item.category!)) &&
     item.rarity !== ItemRarity.Unique

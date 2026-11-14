@@ -95,6 +95,7 @@ export interface ParsedItem {
   category?: ItemCategory
   info: BaseType
   uniqueBase?: BaseType
+  isUnknownItem?: true
   rawText: string
 }
 

@@ -15,6 +15,20 @@ export function createPresets (
   item: ParsedItem,
   opts: CreatePresetsOptions
 ): { presets: FilterPreset[], active: string } {
+  if (item.isUnknownItem) {
+    const stats = createExactStatFilters(item, item.statsByType, opts)
+    stats.forEach(stat => { stat.disabled = true })
+
+    return {
+      active: 'filters.preset_exact',
+      presets: [{
+        id: 'filters.preset_exact',
+        filters: createFilters(item, { ...opts, exact: true }),
+        stats
+      }]
+    }
+  }
+
   if (item.info.refName === 'Expedition Logbook') {
     return {
       active: ROMAN_NUMERALS[0],

@@ -134,6 +134,7 @@ export default defineComponent({
         doSearch.value = false
       } else {
         doSearch.value = Boolean(
+          (item.isUnknownItem) ||
           (item.rarity === ItemRarity.Unique) ||
           (presets.value.active === 'filters.preset_bulk') ||
           (item.mapCompletionReward) ||
@@ -205,7 +206,7 @@ export default defineComponent({
     })
 
     const show = computed(() => {
-      return !(props.item.rarity === ItemRarity.Unique &&
+      return props.item.isUnknownItem || !(props.item.rarity === ItemRarity.Unique &&
         props.item.isUnidentified &&
         props.item.info.unique == null)
     })

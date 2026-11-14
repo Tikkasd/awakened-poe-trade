@@ -21,7 +21,11 @@ type SectionParseResult =
   | 'PARSER_SKIPPED'
 
 type ParserFn = (section: string[], item: ParserState) => SectionParseResult
-type VirtualParserFn = (item: ParserState) => Result<never, string> | void
+type VirtualParserFn = (item: ParserState, opts: ParseOptions) => Result<never, string> | void
+
+export interface ParseOptions {
+  allowUnknownItem?: boolean
+}
 
 interface ParserState extends ParsedItem {
   name: string
@@ -91,7 +95,7 @@ const parsers: Array<ParserFn | { virtual: VirtualParserFn }> = [
 
 const VALUE_AUGMENTED = ' (augmented)'
 
-export function parseClipboard (clipboard: string): Result<ParsedItem, string> {
+export function parseClipboard (clipboard: string, opts: ParseOptions = {}): Result<ParsedItem, string> {
   try {
     let sections = itemTextToSections(clipboard)
 
@@ -109,7 +113,7 @@ export function parseClipboard (clipboard: string): Result<ParsedItem, string> {
     // each section can be parsed at most by one parser
     for (const parser of parsers) {
       if (typeof parser === 'object') {
-        const error = parser.virtual(parsed.value)
+        const error = parser.virtual(parsed.value, opts)
         if (error) return error
         continue
       }
@@ -177,29 +181,58 @@ function normalizeName (item: ParserState) {
   }
 }
 
-function findInDatabase (item: ParserState) {
+function findInDatabase (item: ParserState, opts: ParseOptions) {
   let info: BaseType[] | undefined
+  let ns: BaseType['namespace'] = 'ITEM'
+  let key = item.baseType ?? item.name
+
   if (item.category === ItemCategory.DivinationCard) {
-    info = ITEM_BY_TRANSLATED('DIVINATION_CARD', item.name)
+    ns = 'DIVINATION_CARD'
+    key = item.name
+    info = ITEM_BY_TRANSLATED(ns, key)
   } else if (item.category === ItemCategory.CapturedBeast) {
-    info = ITEM_BY_TRANSLATED('CAPTURED_BEAST', item.baseType ?? item.name)
+    ns = 'CAPTURED_BEAST'
+    key = item.baseType ?? item.name
+    info = ITEM_BY_TRANSLATED(ns, key)
   } else if (item.category === ItemCategory.Gem) {
-    info = ITEM_BY_TRANSLATED('GEM', item.name)
+    ns = 'GEM'
+    key = item.name
+    info = ITEM_BY_TRANSLATED(ns, key)
   } else if (item.category === ItemCategory.MetamorphSample) {
     info = ITEM_BY_TRANSLATED('ITEM', item.name)
   } else if (item.category === ItemCategory.Voidstone) {
     info = ITEM_BY_REF('ITEM', 'Charged Compass')
   } else if (item.rarity === ItemRarity.Unique && !item.isUnidentified) {
-    info = ITEM_BY_TRANSLATED('UNIQUE', item.name)
+    ns = 'UNIQUE'
+    key = item.name
+    info = ITEM_BY_TRANSLATED(ns, key)
   } else {
     info = ITEM_BY_TRANSLATED('ITEM', item.baseType ?? item.name)
   }
   if (!info?.length) {
-    return err('item.unknown')
+    if (!opts.allowUnknownItem) return err('item.unknown')
+
+    item.info = {
+      namespace: ns,
+      name: key,
+      refName: key,
+      icon: '/images/wisdom.png'
+    }
+    item.infoVariants = [item.info]
+    item.isUnknownItem = true
+    return
   }
   if (info[0].unique) {
     const baseTypes = ITEM_BY_TRANSLATED('ITEM', item.baseType!)
-    if (!baseTypes?.length) return err('item.unknown')
+    if (!baseTypes?.length) {
+      if (!opts.allowUnknownItem) return err('item.unknown')
+
+      // unique itself is known, only its base type is missing
+      item.infoVariants = info
+      item.info = info[0]
+      item.isUnknownItem = true
+      return
+    }
 
     const baseTypeRef = baseTypes[0].refName
     info = info.filter(info => info.unique!.base === baseTypeRef)
@@ -301,10 +334,16 @@ function parseFractured (item: ParserState) {
   }
 }
 
-function pickCorrectVariant (item: ParserState) {
+function pickCorrectVariant (item: ParserState, opts: ParseOptions) {
   item.info = _pickCorrectVariant(item.infoVariants, item) ?? item.infoVariants[0]
   if (item.info.unique) {
-    const baseVariants = ITEM_BY_REF('ITEM', item.info.unique.base)!
+    const baseVariants = ITEM_BY_REF('ITEM', item.info.unique.base)
+    if (!baseVariants) {
+      if (!opts.allowUnknownItem) throw new Error(`Unknown base type: ${item.info.unique.base}`)
+
+      item.isUnknownItem = true
+      return
+    }
     item.uniqueBase = _pickCorrectVariant(baseVariants, item) ?? baseVariants[0]
   }
 }

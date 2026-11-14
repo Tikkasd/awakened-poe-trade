@@ -122,6 +122,7 @@ export default defineComponent({
       showFallback: computed(() => {
         const { item } = props
         return (
+          !item.isUnknownItem &&
           !item.info.craftable &&
           item.info.refName !== 'Mercenary Warrant' // need vertical space
         )

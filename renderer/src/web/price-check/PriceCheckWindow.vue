@@ -39,6 +39,13 @@
           <pre class="bg-gray-900 rounded m-4 overflow-x-hidden p-2">{{ item.error.rawText }}</pre>
         </template>
         <template v-else-if="item?.isOk()">
+          <template v-if="item.value.isUnknownItem">
+            <div class="m-4 py-1 px-2 bg-gray-900 rounded">
+              <div>{{ t('item.unknown') }}</div>
+              <div class="text-gray-400">{{ t('item.unknown_help') }}</div>
+            </div>
+            <pre class="bg-gray-900 rounded mx-4 mb-4 overflow-x-hidden p-2">{{ item.value.rawText }}</pre>
+          </template>
           <unidentified-resolver :item="item.value" @identify="handleIdentification($event)" />
           <checked-item v-if="isLeagueSelected"
             :item="item.value" :advanced-check="advancedCheck" />
@@ -181,7 +188,7 @@ export default defineComponent({
       checkPosition.value = e.position
       advancedCheck.value = e.focusOverlay
 
-      item.value = (e.item ? ok(e.item as ParsedItem) : parseClipboard(e.clipboard))
+      item.value = (e.item ? ok(e.item as ParsedItem) : parseClipboard(e.clipboard, { allowUnknownItem: true }))
         .andThen(item => (
           (item.category === ItemCategory.Sentinel && item.rarity !== ItemRarity.Unique))
           ? err('item.unknown')

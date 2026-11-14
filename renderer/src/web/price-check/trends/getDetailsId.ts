@@ -17,6 +17,8 @@ export function isValuableBasetype (item: ParsedItem): boolean {
 }
 
 export function getDetailsId (item: ParsedItem) {
+  if (item.isUnknownItem) return
+
   if (item.category === ItemCategory.Gem) {
     return forSkillGem(item)
   }

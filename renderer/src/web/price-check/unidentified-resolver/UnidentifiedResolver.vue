@@ -52,6 +52,7 @@ export default defineComponent({
 
       return props.item.rarity === ItemRarity.Unique &&
         props.item.isUnidentified &&
+        !props.item.isUnknownItem &&
         !props.item.info.unique
     })
 
