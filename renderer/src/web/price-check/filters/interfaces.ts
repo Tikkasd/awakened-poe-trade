@@ -13,6 +13,7 @@ interface SearchFilter {
   baseType?: string
   baseTypeTrade?: string
   discriminatorTrade?: string
+  term?: string
   category?: ItemCategory
 }
 

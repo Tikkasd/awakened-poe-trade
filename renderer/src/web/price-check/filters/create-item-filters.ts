@@ -42,18 +42,18 @@ export function createFilters (
   }
 
   if (item.isUnknownItem) {
-    if (item.rarity === ItemRarity.Unique && !item.isUnidentified) {
-      filters.searchExact = {
-        name: item.info.name,
-        nameTrade: t(opts, item.info),
-        baseTypeTrade: (item.uniqueBase) ? t(opts, item.uniqueBase) : undefined
-      }
-    } else {
-      filters.searchExact = {
-        baseType: item.info.name,
-        baseTypeTrade: t(opts, item.info)
-      }
+    const searchTerm = t(opts, item.info)
+
+    filters.searchExact = {
+      name: item.info.name,
+      term: searchTerm
     }
+    filters.searchRelaxed = {
+      name: item.info.name,
+      term: searchTerm,
+      disabled: false
+    }
+
     return filters
   }
 

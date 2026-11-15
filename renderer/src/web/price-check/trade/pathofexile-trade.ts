@@ -90,6 +90,7 @@ interface TradeRequest {
     status: { option: 'online' | 'securable' | 'available' | 'any' }
     name?: string | { discriminator: string, option: string }
     type?: string | { discriminator: string, option: string }
+    term?: string
     stats: Array<{
       type: 'and' | 'if' | 'count' | 'not' | 'mercenary'
       value?: FilterRange
@@ -302,7 +303,9 @@ export function createTradeRequest (filters: ItemFilters, stats: FilterOrGroup[]
     activeSearch = activeSearch.sub
   }
 
-  if (activeSearch.nameTrade) {
+  if (activeSearch.term) {
+    query.term = activeSearch.term
+  } else if (activeSearch.nameTrade) {
     query.name = nameToQuery(activeSearch.nameTrade, activeSearch.discriminatorTrade)
   } else if (activeSearch.name) {
     query.name = nameToQuery(activeSearch.name, activeSearch.discriminatorTrade)
