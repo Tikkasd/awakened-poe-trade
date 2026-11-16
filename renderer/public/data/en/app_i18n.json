@@ -168,6 +168,7 @@
     "tier": "Tier {0}",
     "tier_gilded": "Unique",
     "preset_pseudo": "Pseudo",
+    "preset_exact": "Exact",
     "preset_base_item": "Base item",
     "preset_bulk": "Bulk",
     "hide_const_roll": "Roll is not variable",

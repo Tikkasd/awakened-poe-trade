@@ -185,6 +185,7 @@
     "tier": "Ур {0}",
     "tier_gilded": "Уникальный",
     "preset_pseudo": "Псевдо",
+    "preset_exact": "Точный",
     "preset_base_item": "База предмета",
     "preset_bulk": "Опт",
     "hide_const_roll": "Ролл не варьируется",

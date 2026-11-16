@@ -3,6 +3,7 @@ import { createExactStatFilters, initUiModFilters } from './create-stat-filters'
 import { createMercenaryFilters } from './pseudo/mercenary'
 import { ModifierType, sumStatsByModType } from '@/parser/modifiers'
 import { ItemCategory, ItemRarity, ParsedItem } from '@/parser'
+import { ARMOUR, WEAPON } from '@/parser/meta'
 import type { FilterPreset } from './interfaces'
 
 const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V']
@@ -10,6 +11,30 @@ const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V']
 type CreatePresetsOptions =
   & Omit<CreateFiltersOptions, 'exact'>
   & { searchStatRange: number }
+
+function isBaseItemSearchable (item: ParsedItem): boolean {
+  const category = item.category ?? item.info.craftable?.category
+
+  return category != null &&
+    (ARMOUR.has(category) || WEAPON.has(category) || category === ItemCategory.Quiver) &&
+    (item.rarity === ItemRarity.Normal ||
+      item.rarity === ItemRarity.Magic ||
+      item.rarity === ItemRarity.Rare)
+}
+
+function createBaseItemPreset (
+  item: ParsedItem,
+  opts: CreatePresetsOptions
+): FilterPreset {
+  const stats = createExactStatFilters(item, item.statsByType, opts)
+  stats.forEach(stat => { stat.disabled = true })
+
+  return {
+    id: 'filters.preset_base_item',
+    filters: createFilters(item, { ...opts, exact: true }),
+    stats
+  }
+}
 
 export function createPresets (
   item: ParsedItem,
@@ -47,6 +72,28 @@ export function createPresets (
         stats: createMercenaryFilters(item)
       }]
     }
+  }
+
+  if (isBaseItemSearchable(item)) {
+    const baseItemPreset = createBaseItemPreset(item, opts)
+
+    if (item.rarity === ItemRarity.Normal || item.isUnidentified) {
+      const exactPreset: FilterPreset = {
+        id: 'filters.preset_exact',
+        filters: createFilters(item, { ...opts, exact: true }),
+        stats: createExactStatFilters(item, item.statsByType, opts)
+      }
+
+      return { active: exactPreset.id, presets: [exactPreset, baseItemPreset] }
+    }
+
+    const pseudoPreset: FilterPreset = {
+      id: 'filters.preset_pseudo',
+      filters: createFilters(item, { ...opts, exact: false }),
+      stats: initUiModFilters(item, opts)
+    }
+
+    return { active: pseudoPreset.id, presets: [pseudoPreset, baseItemPreset] }
   }
 
   if (
