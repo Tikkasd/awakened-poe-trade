@@ -41,6 +41,13 @@ export function createFilters (
     }
   }
 
+  if (item.category != null && item.category !== ItemCategory.Currency) {
+    filters.quality = {
+      value: item.quality ?? 0,
+      disabled: true
+    }
+  }
+
   if (item.isUnknownItem) {
     const searchTerm = t(opts, item.info)
 
