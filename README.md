@@ -13,6 +13,12 @@
 |-----|------|--------|----------|
 | ![](https://i.imgur.com/LTsH2DZ.png) | ![](https://i.imgur.com/2XL5Wl8.png) | ![](https://i.imgur.com/UTV6prE.png) | ![](https://i.imgur.com/dQ9Sns6.png) |
 
+### Fork changes
+
+- Unknown items fall back to a relaxed trade search based on the item name.
+- Normal, magic, and rare armour and weapons show a `Base item` preset for base-only searches.
+- The `Quality` filter field is always shown for non-currency items, inactive by default unless a special quality rule activates it.
+
 ### Development
 
 See [DEVELOPING.md](./DEVELOPING.md)
