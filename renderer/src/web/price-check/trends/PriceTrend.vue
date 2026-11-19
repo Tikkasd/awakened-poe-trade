@@ -124,7 +124,8 @@ export default defineComponent({
         return (
           !item.isUnknownItem &&
           !item.info.craftable &&
-          item.info.refName !== 'Mercenary Warrant' // need vertical space
+          item.info.refName !== 'Mercenary Warrant' && // need vertical space
+          item.info.refName !== 'Viscera' // no icons
         )
       }),
       slowdown
